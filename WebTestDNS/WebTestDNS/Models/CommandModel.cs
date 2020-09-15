@@ -10,5 +10,13 @@ namespace WebTestDNS.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public CommandModel(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
+
+        public CommandModel(string name) => Name = name;
     }
 }
