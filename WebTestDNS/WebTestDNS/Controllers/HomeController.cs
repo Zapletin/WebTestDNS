@@ -23,7 +23,7 @@ namespace WebTestDNS.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(context.Commands);
         }
 
         [HttpGet]

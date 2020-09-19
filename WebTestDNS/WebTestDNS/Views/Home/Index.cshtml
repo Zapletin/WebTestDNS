@@ -1,8 +1,12 @@
 ﻿@model IEnumerable<WebTestDNS.Models.CommandModel>
 @{
     ViewData["Title"] = "Home Page";
-
-    var options = new List<string>() { "git status", "git add .", "ipconfig" };
+    var commands = Model.ToList();
+    var options = new List<string>();
+    foreach (var command in commands)
+    {
+        options.Add(command.ToString());
+    }
 }
 
     <div class="text-center">

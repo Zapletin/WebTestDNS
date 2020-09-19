@@ -18,5 +18,7 @@ namespace WebTestDNS.Models
         }
 
         public CommandModel(string name) => Name = name;
+
+        public override string ToString() => $"{Name}";
     }
 }
