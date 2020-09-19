@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebTestDNS.Models;
 
 namespace WebTestDNS.Controllers
@@ -15,9 +16,9 @@ namespace WebTestDNS.Controllers
         public ResultController(CommandContext context) => this.context = context;
 
         // GET: Result
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(context.Commands.ToList());
+            return View(await context.Commands.ToListAsync());
         }
 
         // GET: Result/Details/5
@@ -39,8 +40,8 @@ namespace WebTestDNS.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
-
+                context.Add(collection["cmdCommand"].ToString());
+                context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch
