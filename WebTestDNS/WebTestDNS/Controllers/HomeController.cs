@@ -26,6 +26,11 @@ namespace WebTestDNS.Controllers
             return View(context.Commands);
         }
 
+        public IActionResult PartialIndex()
+        {
+            return PartialView();
+        }
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -39,11 +44,11 @@ namespace WebTestDNS.Controllers
             {
                 context.Add(new CommandModel(command));
                 context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(PartialIndex));
             }
             catch
             {
-                return View();
+                return PartialView();
             }
         }
 
