@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -35,16 +35,24 @@ namespace WebTestDNS.Controllers
         [HttpPost]
         public IActionResult Create(string command)
         {
-            try
+            context.Add(new CommandModel(command));
+            context.SaveChanges();
+            var cmd = new ProcessStartInfo("cmd.exe", $"/c {command}")
             {
-                context.Add(new CommandModel(command));
-                context.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+            var process = new Process() { StartInfo = cmd };
+            string answer;
+            if (process.Start())
             {
-                return View();
+                answer = process.StandardOutput.ReadToEnd();
+                process.Close();
             }
+            else answer = "Не удалось запустить процесс";
+            Response.WriteAsync(answer, Encoding.GetEncoding(1251));
+            return RedirectToAction(nameof(Index));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
