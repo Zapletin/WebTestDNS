@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using WebTestDNS.Models;
 
 namespace WebTestDNS.Controllers
@@ -21,35 +22,22 @@ namespace WebTestDNS.Controllers
             this.context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(context.Commands);
+            return View(await context.Commands.ToListAsync());
         }
 
-        public IActionResult PartialIndex()
+        public async Task<IActionResult> PartialIndex()
         {
-            return PartialView();
-        }
-
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
+            return PartialView("~/Views/Home/AddCommandForm.cshtml", await context.Commands.ToListAsync());
         }
 
         [HttpPost]
         public IActionResult Create(string command)
         {
-            try
-            {
-                context.Add(new CommandModel(command));
-                context.SaveChanges();
-                return RedirectToAction(nameof(PartialIndex));
-            }
-            catch
-            {
-                return PartialView();
-            }
+            context.Add(new CommandModel(command));
+            context.SaveChanges();
+            return RedirectToAction(nameof(PartialIndex));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

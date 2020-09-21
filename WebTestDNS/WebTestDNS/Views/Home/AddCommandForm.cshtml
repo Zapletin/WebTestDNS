@@ -1,0 +1,22 @@
+﻿@model IEnumerable<WebTestDNS.Models.CommandModel>
+@{
+    var commands = Model.ToList();
+    var options = new List<string>();
+    foreach (var command in commands)
+    {
+        options.Add(command.ToString());
+    }
+}
+
+<form method="post" action="Home/Create" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#divCommands">
+    <div id="divCommands">
+        <p>Введите консольную команду: <input type="text" id="inputCommands" name="command" list="cmdCommands" required autocomplete="off" /></p>
+        <datalist id="cmdCommands" name="commandList">
+            @foreach (var option in options)
+            {
+                <option>@option</option>
+            }
+        </datalist>
+        <button type="submit">Выполнить</button>
+    </div>
+</form>
