@@ -9,6 +9,7 @@
 }
 
 <form method="post" action="Home/Create" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#divCommands">
+    <br>
     <div id="divCommands">
         <p>Введите консольную команду: <input type="text" id="inputCommands" name="command" list="cmdCommands" required autocomplete="off" /></p>
         <datalist id="cmdCommands" name="commandList">
@@ -17,7 +18,7 @@
                 <option>@option</option>
             }
         </datalist>
-        <button type="submit">Выполнить</button>
+        <button type="submit">Выполнить</button><br><br>
         <p>Количество команд в базе: <label>@commands.Count</label></p>
         <pre class="text-left align-content-between">@Model.Result</pre>
     </div>
