@@ -23,7 +23,6 @@ namespace WebTestDNS
                 try
                 {
                     var context = services.GetRequiredService<CommandContext>();
-                    //ExampleData.Initialize(context);
                 }
                 catch(Exception exception)
                 {
