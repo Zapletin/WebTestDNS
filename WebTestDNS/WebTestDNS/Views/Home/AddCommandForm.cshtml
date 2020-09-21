@@ -4,8 +4,9 @@
     var options = new List<string>();
     foreach (var command in commands)
     {
-        options.Add(command.ToString());
+        options.Add(command.Name);
     }
+    options = options.Distinct().ToList();
 }
 
 <form method="post" action="Home/Create" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#divCommands">
