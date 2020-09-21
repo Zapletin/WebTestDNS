@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -24,20 +24,36 @@ namespace WebTestDNS.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await context.Commands.ToListAsync());
+            var resultModel = new ResultModel(await context.Commands.ToListAsync(), string.Empty);
+            return View(resultModel);
         }
 
-        public async Task<IActionResult> PartialIndex()
+        public async Task<IActionResult> PartialIndex(string answer)
         {
-            return PartialView("~/Views/Home/AddCommandForm.cshtml", await context.Commands.ToListAsync());
+            var resultModel = new ResultModel(await context.Commands.ToListAsync(), answer);
+            return PartialView("~/Views/Home/AddCommandForm.cshtml", resultModel);
         }
 
         [HttpPost]
-        public IActionResult Create(string command)
+        public async Task<IActionResult> Create(string command)
         {
             context.Add(new CommandModel(command));
             context.SaveChanges();
-            return RedirectToAction(nameof(PartialIndex));
+            var cmd = new ProcessStartInfo("cmd.exe", $"/c {command}")
+            {
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+            var process = new Process() { StartInfo = cmd };
+            string answer;
+            if (process.Start())
+            {
+                answer = process.StandardOutput.ReadToEnd();
+                process.Close();
+            }
+            else answer = "Не удалось запустить процесс";
+            return await PartialIndex(answer);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

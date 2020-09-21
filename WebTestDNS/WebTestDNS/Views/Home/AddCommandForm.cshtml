@@ -1,6 +1,6 @@
-﻿@model IEnumerable<WebTestDNS.Models.CommandModel>
+﻿@model WebTestDNS.Models.ResultModel
 @{
-    var commands = Model.ToList();
+    var commands = Model.Commands.ToList();
     var options = new List<string>();
     foreach (var command in commands)
     {
@@ -18,5 +18,7 @@
             }
         </datalist>
         <button type="submit">Выполнить</button>
+        <p>Количество команд в базе: <label>@commands.Count</label></p>
+        <pre class="text-left align-content-between">@Model.Result</pre>
     </div>
 </form>
